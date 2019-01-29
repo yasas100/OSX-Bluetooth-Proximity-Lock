@@ -5,6 +5,13 @@ from os import path
 from time import sleep
 from IOBluetooth import *
 from IOBluetoothUI import *
+from ctypes import CDLL
+
+def logoff():
+    print("Logging Off")
+    loginPF = CDLL('/System/Library/PrivateFrameworks/login.framework/Versions/Current/login')
+    result = loginPF.SACLockScreenImmediate()
+
 
 opts = OptionParser()
 opts.add_option('-d', '--device', dest='device', help='ask for device', default=False, action='store_true')
@@ -25,14 +32,19 @@ else:
 
 dev.openConnection()
 if dev.isConnected():
+    print("Device Connected")
     while True:
         if not dev.isConnected():
             dev.openConnection()
         devSignal = dev.rawRSSI()
+        print(devSignal)
         if devSignal < 0 and devSignal > -60:
             color = 'green'
         else:
             color = 'red'
+        if devSignal < -60:
+            logoff()
         sys.stdout.write(colored("%s\r" % devSignal, color))
         sys.stdout.flush()
-        sleep(5)
+        sleep(1)
+
