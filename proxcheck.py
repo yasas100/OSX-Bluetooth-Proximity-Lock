@@ -38,13 +38,13 @@ if dev.isConnected():
             dev.openConnection()
         devSignal = dev.rawRSSI()
         print(devSignal)
-        if devSignal < 0 and devSignal > -60:
-            color = 'green'
-        else:
-            color = 'red'
-        if devSignal < -60:
+        #if devSignal < 0 and devSignal > -60:
+        # color = 'green'
+        #else:
+        #   color = 'red'
+        if devSignal < -50:
             logoff()
-        sys.stdout.write(colored("%s\r" % devSignal, color))
+        sys.stdout.write("%s\r" % devSignal)
         sys.stdout.flush()
         sleep(1)
 
